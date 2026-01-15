@@ -1,0 +1,10 @@
+name: gpu_usage
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python>=3.9
+  - pip
+  - pip:
+    - pyobjc-framework-Cocoa>=10.0
+    - Pillow>=10.0.0
