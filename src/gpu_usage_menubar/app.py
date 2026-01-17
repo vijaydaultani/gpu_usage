@@ -537,6 +537,13 @@ def main():
     app = NSApplication.sharedApplication()
     app.setActivationPolicy_(NSApplicationActivationPolicyAccessory)
 
+    # Set the application icon from the app bundle
+    app_icon_path = "/Applications/GPU Monitor.app/Contents/Resources/AppIcon.icns"
+    if os.path.exists(app_icon_path):
+        app_icon = NSImage.alloc().initWithContentsOfFile_(app_icon_path)
+        if app_icon:
+            app.setApplicationIconImage_(app_icon)
+
     # Create and initialize our app
     delegate = GPUMonitorApp.alloc().init()
 

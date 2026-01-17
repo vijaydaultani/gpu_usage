@@ -29,5 +29,11 @@ if [ ! -f "$MICROMAMBA_BIN" ]; then
     fi
 fi
 
-# Run using micromamba's Python
-exec "$MICROMAMBA_BIN" run -p "$MAMBA_ENV_DIR" python -m gpu_usage_menubar.app
+# Create symlink to python with proper name if it doesn't exist
+GPU_MONITOR_BIN="$MAMBA_ENV_DIR/bin/GPUMonitor"
+if [ ! -f "$GPU_MONITOR_BIN" ]; then
+    ln -sf "$MAMBA_ENV_DIR/bin/python" "$GPU_MONITOR_BIN"
+fi
+
+# Run using the renamed executable so Bartender shows correct name
+exec "$MICROMAMBA_BIN" run -p "$MAMBA_ENV_DIR" "$GPU_MONITOR_BIN" -m gpu_usage_menubar.app
