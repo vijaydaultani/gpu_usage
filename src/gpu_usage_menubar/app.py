@@ -9,6 +9,13 @@ import time
 import tempfile
 import os
 import logging
+
+# Set process name for Bartender and other menu bar managers
+try:
+    import setproctitle
+    setproctitle.setproctitle("GPU Monitor")
+except ImportError:
+    pass
 from Foundation import NSObject, NSTimer, NSDate
 from typing import Optional
 
