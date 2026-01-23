@@ -39,7 +39,7 @@ from AppKit import (
     NSApplicationActivationPolicyAccessory
 )
 from Foundation import NSWorkspace, NSNotificationCenter
-from .gpu_fetcher import fetch_gpu_data, GPUData
+from .gpu_fetcher import fetch_gpu_data, GPUData, get_ssh_manager
 from .icon_generator import create_dual_gpu_icon, create_single_gpu_icon, create_error_icon
 
 
@@ -517,7 +517,7 @@ class GPUMonitorApp(NSObject):
         NSApplication.sharedApplication().terminate_(self)
 
     def cleanup(self):
-        """Clean up resources."""
+        """Clean up resources including SSH connections."""
         workspace = NSWorkspace.sharedWorkspace()
         notification_center = workspace.notificationCenter()
         notification_center.removeObserver_(self)
@@ -530,6 +530,13 @@ class GPUMonitorApp(NSObject):
                 os.unlink(self._icon_path)
             except:
                 pass
+
+        # Close SSH connection
+        try:
+            ssh_manager = get_ssh_manager()
+            ssh_manager.close_connection(self.hostname, self.ssh_user)
+        except Exception as e:
+            logging.error(f"Error closing SSH connection: {e}")
 
 
 def main():
